@@ -3,6 +3,7 @@ library keyboard_shortcuts;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 Widget homeWidget;
 List<KeyBoardShortcuts> keyBoardShortcuts = [];
@@ -59,7 +60,6 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   FocusScopeNode focusScopeNode;
   ScrollController _controller = ScrollController();
   bool controllerIsReady = false;
-  bool first = true;
   bool listening = false;
 
   @override
@@ -74,15 +74,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   void dispose() {
     super.dispose();
     _controller.dispose();
-    focusScopeNode.removeListener(_handleFocusChanged);
     _detachKeyboardIfAttached();
-  }
-
-  void _handleFocusChanged() {
-    if (focusScopeNode.hasFocus)
-      _attachKeyboardIfDetached();
-    else
-      _detachKeyboardIfAttached();
   }
 
   void _attachKeyboardIfDetached() {
@@ -196,13 +188,16 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
 
   @override
   Widget build(BuildContext context) {
-    if (first) {
-      focusScopeNode = FocusScope.of(context);
-      focusScopeNode.addListener(_handleFocusChanged);
-      setState(() => first = false);
-    }
-
-    return widget.globalShortcuts ? PrimaryScrollController(controller: _controller, child: widget.child) : widget.child;
+    return VisibilityDetector(
+      key: UniqueKey(),
+      child: PrimaryScrollController(controller: _controller, child: widget.child),
+      onVisibilityChanged: (visibilityInfo) {
+        if (visibilityInfo.visibleFraction == 1)
+          _attachKeyboardIfDetached();
+        else
+          _detachKeyboardIfAttached();
+      },
+    );
   }
 }
 
