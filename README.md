@@ -6,8 +6,8 @@ Keyboard shortcuts to add where you want
 
 ## Example
 
-On control left + key P are pressed, user Navigate to SecondPage()
-Helplabel will be display on help menu
+On controlLeft + key P are pressed, user navigate to SecondPage()
+helpLabel will be display on help menu
 ```dart
     KeyBoardShortcuts(
         keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyP},
