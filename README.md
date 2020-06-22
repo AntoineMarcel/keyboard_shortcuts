@@ -1,14 +1,61 @@
-# keyboard_shortcuts
+# Flutter Keyboard Shortcuts
 
-A new Flutter package project.
+Keyboard shortcuts to add where you want
 
-## Getting Started
+![](basic_example.gif)
 
-This project is a starting point for a Dart
-[package](https://flutter.dev/developing-packages/),
-a library module containing code that can be shared easily across
-multiple Flutter or Dart projects.
+## Example
 
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.dev/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+On control left + key P are pressed, user Navigate to SecondPage()
+Helplabel will be display on help menu
+```dart
+    KeyBoardShortcuts(
+        keysToPress: {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyP},
+        onKeysPressed: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => SecondPage()),
+        ),
+        helpLabel: "Go to Second Page",
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          ),
+        ),
+      ),
+```
+
+If globalShortcuts is set to true, user can use Home Button to go on Homepage, up and down button to go on top or bottom of the page and escape to go on last page
+```dart
+    KeyBoardShortcuts(
+        globalShortcuts: true,
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'You have pushed the button this many times:',
+              ),
+              Text(
+                '$_counter',
+                style: Theme.of(context).textTheme.headline4,
+              ),
+            ],
+          ),
+        ),
+      ),
+```
+
+
+initShortCuts() is used to customize shortcuts, you can set home page, title of help menu, icon on custom shortcuts and custom help menu
+```dart
+    initShortCuts(HomePage(), helpTitle : "Help Menu", helpIcon : Icons.menu);
+```
