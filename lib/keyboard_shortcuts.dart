@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 Widget homeWidget;
-List<KeyBoardShortcuts> keyBoardShortcuts = [];
+List<_KeyBoardShortcuts> keyBoardShortcuts = [];
 Widget customGlobal;
 String customTitle;
 IconData customIcon;
@@ -58,20 +58,21 @@ class KeyBoardShortcuts extends StatefulWidget {
 
   @override
   _KeyBoardShortcuts createState() => _KeyBoardShortcuts();
-  bool listening = false;
 }
 
 class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   FocusScopeNode focusScopeNode;
   ScrollController _controller = ScrollController();
   bool controllerIsReady = false;
-
+  bool listening = false;
+  Key key;
   @override
   void initState() {
     _controller.addListener(() {
       if (_controller.hasClients) setState(() => controllerIsReady = true);
     });
     _attachKeyboardIfDetached();
+    key = widget.key ?? UniqueKey();
     super.initState();
   }
 
@@ -83,17 +84,17 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   }
 
   void _attachKeyboardIfDetached() {
-    if (widget.listening) return;
-    keyBoardShortcuts.add(this.widget);
+    if (listening) return;
+    keyBoardShortcuts.add(this);
     RawKeyboard.instance.addListener(listener);
-    widget.listening = true;
+    listening = true;
   }
 
   void _detachKeyboardIfAttached() {
-    if (!widget.listening) return;
-    keyBoardShortcuts.remove(this.widget);
+    if (!listening) return;
+    keyBoardShortcuts.remove(this);
     RawKeyboard.instance.removeListener(listener);
-    widget.listening = false;
+    listening = false;
   }
 
   void listener(RawKeyEvent v) async {
@@ -114,7 +115,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
         List<Widget> activeHelp = [];
 
         //verify if element is visible or not
-        List<KeyBoardShortcuts> toRemove = [];
+        List<_KeyBoardShortcuts> toRemove = [];
         keyBoardShortcuts.forEach((element) {
           if (VisibilityDetectorController.instance
                   .widgetBoundsFor(element.key) ==
@@ -131,7 +132,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
         }); // get all custom shortcuts
 
         bool showGlobalShort =
-            keyBoardShortcuts.any((element) => element.globalShortcuts);
+            keyBoardShortcuts.any((element) => element.widget.globalShortcuts);
 
         if (!helperIsOpen && (activeHelp.isNotEmpty || showGlobalShort)) {
           helperIsOpen = true;
@@ -220,7 +221,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   @override
   Widget build(BuildContext context) {
     return VisibilityDetector(
-      key: widget.key,
+      key: key,
       child:
           PrimaryScrollController(controller: _controller, child: widget.child),
       onVisibilityChanged: (visibilityInfo) {
@@ -233,16 +234,16 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
   }
 }
 
-Widget helpWidget(KeyBoardShortcuts widget) {
+Widget helpWidget(_KeyBoardShortcuts widget) {
   String text = "";
-  if (widget.keysToPress != null) {
-    for (final i in widget.keysToPress) text += i.debugName + " + ";
+  if (widget.widget.keysToPress != null) {
+    for (final i in widget.widget.keysToPress) text += i.debugName + " + ";
     text = text.substring(0, text.lastIndexOf(" + "));
   }
-  if (widget.helpLabel != null && text != "")
+  if (widget.widget.helpLabel != null && text != "")
     return ListTile(
       leading: Icon(customIcon ?? Icons.settings),
-      title: Text(widget.helpLabel),
+      title: Text(widget.widget.helpLabel),
       subtitle: Text(text),
     );
   return null;
