@@ -1,6 +1,6 @@
 name: keyboard_shortcuts
 description: Widget that allow you to use shortcuts for your application. Custom shortcuts that you define by yourself and global like auto scroll to bottom and top.
-version: 0.1.1
+version: 0.1.2
 author: Antoine MARCEL <amarcel.pro@gmail.com>
 homepage: https://github.com/AntoineMarcel/keyboard_shortcuts
 
