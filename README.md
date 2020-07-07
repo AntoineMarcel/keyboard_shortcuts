@@ -59,3 +59,15 @@ initShortCuts() is used to customize shortcuts, you can set home page, title of 
 ```dart
     initShortCuts(HomePage(), helpTitle : "Help Menu", helpIcon : Icons.menu);
 ```
+
+You can also use initShortCuts to create your own global shortcuts, they will be allow in all page were globalShortcuts is true without rewriting these shortcuts
+```dart
+    initShortCuts(
+    HomePage(),
+    keysToPress: {
+      {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyP},
+    },
+    onKeysPressed: {() => print("Work")},
+    helpLabel: {"Print Work"},
+  );
+```
