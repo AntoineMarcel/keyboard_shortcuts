@@ -30,7 +30,12 @@ void initShortCuts(
   String helpTitle,
   IconData helpIcon,
 }) async {
-  if (keysToPress.length == onKeysPressed.length && onKeysPressed.length == helpLabel.length) {
+  if (keysToPress != null &&
+      onKeysPressed != null &&
+      helpLabel != null &&
+      keysToPress.length == onKeysPressed.length &&
+      onKeysPressed.length == helpLabel.length) {
+    _newGlobal = [];
     for (var i = 0; i < keysToPress.length; i++) {
       _newGlobal.add(Tuple3(keysToPress.elementAt(i), onKeysPressed.elementAt(i), helpLabel.elementAt(i)));
     }
@@ -41,7 +46,7 @@ void initShortCuts(
   _customIcon = helpIcon;
 }
 
-bool isPressed(Set<LogicalKeyboardKey> keysPressed, Set<LogicalKeyboardKey> keysToPress) =>
+bool _isPressed(Set<LogicalKeyboardKey> keysPressed, Set<LogicalKeyboardKey> keysToPress) =>
     keysPressed.containsAll(keysToPress) && keysPressed.length == keysToPress.length;
 
 class KeyBoardShortcuts extends StatefulWidget {
@@ -109,12 +114,12 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
     Set<LogicalKeyboardKey> keysPressed = RawKeyboard.instance.keysPressed;
     if (v.runtimeType == RawKeyDownEvent) {
       // when user type keysToPress
-      if (widget.keysToPress != null && widget.onKeysPressed != null && isPressed(keysPressed, widget.keysToPress)) {
+      if (widget.keysToPress != null && widget.onKeysPressed != null && _isPressed(keysPressed, widget.keysToPress)) {
         widget.onKeysPressed();
       }
 
       // when user request help menu
-      else if (isPressed(keysPressed, {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyH})) {
+      else if (_isPressed(keysPressed, {LogicalKeyboardKey.controlLeft, LogicalKeyboardKey.keyH})) {
         List<Widget> activeHelp = [];
 
         //verify if element is visible or not
@@ -192,9 +197,9 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
           ).then((value) => _helperIsOpen = false);
         }
       } else if (widget.globalShortcuts) {
-        if (_homeWidget != null && isPressed(keysPressed, {LogicalKeyboardKey.home})) {
+        if (_homeWidget != null && _isPressed(keysPressed, {LogicalKeyboardKey.home})) {
           Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => _homeWidget), (_) => false);
-        } else if (isPressed(keysPressed, {LogicalKeyboardKey.escape})) {
+        } else if (_isPressed(keysPressed, {LogicalKeyboardKey.escape})) {
           Navigator.maybePop(context);
         } else if (controllerIsReady && keysPressed.containsAll({LogicalKeyboardKey.pageDown}) ||
             keysPressed.first.keyId == 0x10700000022) {
@@ -211,7 +216,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
           );
         }
         for (final newElement in _newGlobal) {
-          if (isPressed(keysPressed, newElement.item1)) {
+          if (_isPressed(keysPressed, newElement.item1)) {
             newElement.item2();
             return;
           }
