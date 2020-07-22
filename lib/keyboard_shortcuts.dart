@@ -12,7 +12,7 @@ Widget _customGlobal;
 String _customTitle;
 IconData _customIcon;
 bool _helperIsOpen = false;
-List<Tuple3<Set<LogicalKeyboardKey>, VoidCallback, String>> _newGlobal = [];
+List<Tuple3<Set<LogicalKeyboardKey>, Function(BuildContext context), String>> _newGlobal = [];
 
 enum BasicShortCuts {
   creation,
@@ -24,7 +24,7 @@ enum BasicShortCuts {
 void initShortCuts(
   Widget homePage, {
   Set<Set<LogicalKeyboardKey>> keysToPress,
-  Set<VoidCallback> onKeysPressed,
+  Set<Function(BuildContext context)> onKeysPressed,
   Set<String> helpLabel,
   Widget helpGlobal,
   String helpTitle,
@@ -217,7 +217,7 @@ class _KeyBoardShortcuts extends State<KeyBoardShortcuts> {
         }
         for (final newElement in _newGlobal) {
           if (_isPressed(keysPressed, newElement.item1)) {
-            newElement.item2();
+            newElement.item2(context);
             return;
           }
         }

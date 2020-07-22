@@ -1,3 +1,7 @@
+## [0.1.3] - Ajustment
+
+* Add context to global functions
+
 ## [0.1.2] - Correct issues
 
 * Correction on issues about global shortcuts 
