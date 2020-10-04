@@ -1,10 +1,10 @@
 library keyboard_shortcuts;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/foundation.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 import 'package:tuple/tuple.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 
 Widget _homeWidget;
 List<_KeyBoardShortcuts> _keyBoardShortcuts = [];
@@ -46,8 +46,26 @@ void initShortCuts(
   _customIcon = helpIcon;
 }
 
-bool _isPressed(Set<LogicalKeyboardKey> keysPressed, Set<LogicalKeyboardKey> keysToPress) =>
-    keysPressed.containsAll(keysToPress) && keysPressed.length == keysToPress.length;
+bool _isPressed(Set<LogicalKeyboardKey> keysPressed, Set<LogicalKeyboardKey> keysToPress) {
+  //when we type shift on chrome flutter's core return two pressed keys : Shift Left && Shift Right. So we need to delete one on the set to run the action
+  var rights = keysPressed.where((element) => element.debugName.contains("Right"));
+  var lefts = keysPressed.where((element) => element.debugName.contains("Left"));
+  var toRemove = [];
+
+  for (final rightElement in rights) {
+    var leftElement =
+        lefts.firstWhere((element) => element.debugName.split(" ")[0] == rightElement.debugName.split(" ")[0], orElse: () => null);
+    if (leftElement != null) {
+      var actualKey = keysToPress.where((element) => element.debugName.split(" ")[0] == rightElement.debugName.split(" ")[0]);
+      if (actualKey != null && actualKey.length > 0 && actualKey.first.debugName.isNotEmpty)
+        actualKey.first.debugName.contains("Right") ? toRemove.add(leftElement) : toRemove.add(rightElement);
+    }
+  }
+
+  keysPressed.removeWhere((e) => toRemove.contains(e));
+
+  return keysPressed.containsAll(keysToPress) && keysPressed.length == keysToPress.length;
+}
 
 class KeyBoardShortcuts extends StatefulWidget {
   final Widget child;

@@ -1,3 +1,7 @@
+## [0.1.4] - Control Alt Shift keys correction on chrome
+
+* Correction on these combinaison
+
 ## [0.1.3] - Ajustment
 
 * Add context to global functions
