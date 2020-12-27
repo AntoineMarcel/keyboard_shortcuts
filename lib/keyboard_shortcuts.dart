@@ -48,21 +48,8 @@ void initShortCuts(
 
 bool _isPressed(Set<LogicalKeyboardKey> keysPressed, Set<LogicalKeyboardKey> keysToPress) {
   //when we type shift on chrome flutter's core return two pressed keys : Shift Left && Shift Right. So we need to delete one on the set to run the action
-  var rights = keysPressed.where((element) => element.debugName.contains("Right"));
-  var lefts = keysPressed.where((element) => element.debugName.contains("Left"));
-  var toRemove = [];
-
-  for (final rightElement in rights) {
-    var leftElement =
-        lefts.firstWhere((element) => element.debugName.split(" ")[0] == rightElement.debugName.split(" ")[0], orElse: () => null);
-    if (leftElement != null) {
-      var actualKey = keysToPress.where((element) => element.debugName.split(" ")[0] == rightElement.debugName.split(" ")[0]);
-      if (actualKey != null && actualKey.length > 0 && actualKey.first.debugName.isNotEmpty)
-        actualKey.first.debugName.contains("Right") ? toRemove.add(leftElement) : toRemove.add(rightElement);
-    }
-  }
-
-  keysPressed.removeWhere((e) => toRemove.contains(e));
+  keysToPress = LogicalKeyboardKey.collapseSynonyms(keysToPress);
+  keysPressed = LogicalKeyboardKey.collapseSynonyms(keysPressed);
 
   return keysPressed.containsAll(keysToPress) && keysPressed.length == keysToPress.length;
 }
