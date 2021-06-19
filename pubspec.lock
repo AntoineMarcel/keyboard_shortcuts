@@ -60,13 +60,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  keyboard_shortcuts:
-    dependency: "direct main"
-    description:
-      path: ".."
-      relative: true
-    source: path
-    version: "0.1.5"
   matcher:
     dependency: transitive
     description:
@@ -143,7 +136,7 @@ packages:
     source: hosted
     version: "0.3.0"
   tuple:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: tuple
       url: "https://pub.dartlang.org"
@@ -164,7 +157,7 @@ packages:
     source: hosted
     version: "2.1.0"
   visibility_detector:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: visibility_detector
       url: "https://pub.dartlang.org"
