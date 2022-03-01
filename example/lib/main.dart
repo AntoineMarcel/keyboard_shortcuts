@@ -15,15 +15,12 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
-
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -41,7 +38,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('Flutter Demo Home Page'),
         leading: IconButton(
           icon: Icon(Icons.list),
           onPressed: () => Navigator.push(
@@ -89,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
 class SecondPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    List<String> generatedList = List<String>.generate(100, (counter) => "Item $counter");
+    List<String> generatedList =
+        List<String>.generate(100, (counter) => "Item $counter");
 
     return Scaffold(
       appBar: AppBar(
