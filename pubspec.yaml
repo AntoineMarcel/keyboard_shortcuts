@@ -1,17 +1,17 @@
 name: keyboard_shortcuts
 description: Widget that allow you to use shortcuts for your application. Custom shortcuts that you define by yourself and global like auto scroll to bottom and top.
 version: 0.1.4
-author: Antoine MARCEL <amarcel.pro@gmail.com>
 homepage: https://github.com/AntoineMarcel/keyboard_shortcuts
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  visibility_detector: ^0.1.5
-  tuple: ^1.0.3
+  visibility_detector: ^0.3.3
+  tuple: ^2.0.0
+  collection: ^1.16.0
 
 dev_dependencies:
   flutter_test:
